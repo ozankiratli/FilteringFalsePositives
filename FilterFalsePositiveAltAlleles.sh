@@ -1,9 +1,8 @@
 #!/bin/bash
 ECHO=/bin/echo
-bcftools view -i "FORMAT/AD[:3]<2 && INFO/AD[3]<5" M2018-DP100.vcf > Site3.vcf
-bcftools query -f "%CHROM %POS\n" Site3.vcf > Pos3.txt
-bcftools view -i "FORMAT/AD[:2]<2 && INFO/AD[2]<5" M2018-DP100.vcf > Site2.vcf
-bcftools query -f "%CHROM %POS\n" Site2.vcf > Pos2.txt
+bcftools query -i "FORMAT/AD[:2]<2 && INFO/AD[2]<5" -f "%CHROM %POS\n" $1 > Pos2.txt
+bcftools query -i "FORMAT/AD[:3]<2 && INFO/AD[3]<5" -f "%CHROM %POS\n" $1 > Pos3.txt
+
 while IFS= read -r line ; do
 if [[ ${line:0:2} = "##" ]] ; then
   echo $line 
@@ -64,7 +63,5 @@ else
 fi
 done < $1
 
-rm Site2.vcf
-rm Site3.vcf
 rm Pos2.txt
 rm Pos3.txt
